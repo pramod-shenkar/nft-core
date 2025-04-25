@@ -1,0 +1,5 @@
+version: "3"
+tasks:
+  infra:
+    cmds:
+      - cd ./deploy && docker compose up -d
