@@ -78,14 +78,23 @@ func (h *RequestHandler) GetRequest(c context.Context, req *GetRequestRequest) (
 
 func (h *RequestHandler) GetRequests(c context.Context, req *GetRequestsRequest) (*GetRequestsResponse, error) {
 
-	var request *model.Request = &model.Request{}
+	var where *model.Request = &model.Request{}
 	if req.Where != nil {
-		request.Name = req.Where.Name
-		request.CreatedAt = req.Where.CreatedAt.AsTime()
-		request.UpdatedAt = req.Where.UpdatedAt.AsTime()
+		if req.Where.Id != 0 {
+			where.ID = uint(req.Where.Id)
+		}
+		if req.Where.Name != "" {
+			where.Name = req.Where.Name
+		}
+		if req.Where.CreatedAt != nil {
+			where.CreatedAt = req.Where.CreatedAt.AsTime()
+		}
+		if req.Where.UpdatedAt != nil {
+			where.UpdatedAt = req.Where.UpdatedAt.AsTime()
+		}
 	}
 
-	requests, err := h.RequestService.GetRequests(request)
+	requests, err := h.RequestService.GetRequests(where)
 	if err != nil {
 		return nil, err
 	}
