@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package model;
+
+option go_package = "nftledger/internal/adapter/inbound/grpc/generated/model";
+option optimize_for = SPEED;
+
+import "model/common.proto";
+
+message SaveRequestRequest {
+    Request request = 1;
+}
+
+message SaveRequestResponse {
+    string status = 1;
+    string error = 2;
+}
+
+message GetRequestRequest {
+    Request where = 1;
+}
+
+message GetRequestResponse {
+    Request request = 1;
+    string error = 2;
+}
+
+
+message GetRequestsRequest {
+    Request where = 1;
+}
+
+message GetRequestsResponse {
+    repeated Request request = 1;
+    string error = 2;
+}
+
+
+message UpdateRequestRequest {
+    Request where = 1;
+    Request request = 2;
+}
+
+message UpdateRequestResponse {
+    string status = 1;
+    string error = 2;
+}
+
+
+message DeleteRequestRequest {
+    Request where = 1;
+}
+
+message DeleteRequestResponse {
+    string status = 1;
+    string error = 2;
+}

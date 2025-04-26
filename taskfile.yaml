@@ -3,3 +3,26 @@ tasks:
   infra:
     cmds:
       - cd ./deploy && docker compose up -d
+  protoc:
+    cmds:    
+      - protoc
+        --proto_path=internal/adapter/inbound/grpc/protoc
+        --go_out=internal/adapter/inbound/grpc/generated
+        --go_opt=paths=source_relative
+        --go-grpc_out=internal/adapter/inbound/grpc/generated
+        --go-grpc_opt=paths=source_relative
+        internal/adapter/inbound/grpc/protoc/**/*.proto
+      - go mod tidy 
+  
+  grpccurl:
+    cmds:
+    # - grpcurl -plaintext localhost:9999 list
+    # - grpcurl -plaintext localhost:9999 list service.RequestService
+    # - grpcurl -plaintext localhost:9999 service.RequestService.GetRequests
+    # - grpcurl -plaintext -d '{"request":{"name":"alice"}}' localhost:9999 service.RequestService.SaveRequest
+    # - grpcurl -plaintext -d '{"where":{"name":"bob"}}' localhost:9999 service.RequestService.GetRequest
+    # - grpcurl -plaintext -d '{"where":{"name":"bob"},"request":{"name":"alice"}}' localhost:9999 service.RequestService.UpdateRequest
+    # - grpcurl -plaintext localhost:9999 service.RequestService.GetRequests
+    # - grpcurl -plaintext -d '{"where":{"name":"alice"}}' localhost:9999 service.RequestService.DeleteRequest
+    # - grpcurl -plaintext localhost:9999 service.RequestService.GetRequests
+

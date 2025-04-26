@@ -20,4 +20,5 @@ func RegisterRoute(a *server.App, handlers *Handlers) {
 			request.Delete("/", handlers.Request.Delete)
 		}
 	}
+
 }

@@ -49,7 +49,7 @@ func (d *RequestDao) UpdateRequest(where, update *model.Request) error {
 }
 
 func (d *RequestDao) DeleteRequest(request *model.Request) error {
-	err := d.Conn.DB.Model(&model.Request{}).Delete(request).Error
+	err := d.Conn.DB.Model(&model.Request{}).Where(&model.Request{Name: request.Name}).Delete(request).Error
 	if err != nil {
 		return err
 	}
