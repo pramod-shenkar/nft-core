@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"net"
+	"nftledger/internal/adapter/inbound/grpc/interceptor"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -26,7 +27,11 @@ func NewApp() *App {
 	app.Use(logger.New())
 	app.Use(recover.New())
 
-	server := grpc.NewServer()
+	server := grpc.NewServer(
+		grpc.UnaryInterceptor(
+			interceptor.Unarylogger,
+		),
+	)
 	return &App{app, server}
 }
 
