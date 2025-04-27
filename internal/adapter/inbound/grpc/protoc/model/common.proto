@@ -7,10 +7,23 @@ import "google/protobuf/timestamp.proto";
 option go_package = "nftledger/internal/adapter/inbound/grpc/generated/model";
 option optimize_for = SPEED;
 
+enum status {
+    created = 0;
+    approved = 1;
+    rejected = 2;
+    processed = 3;
+    failed = 4;
+}
+
+
 message Request {
     uint64 id = 1;
     string name = 2;
-    google.protobuf.Timestamp created_at = 3;
-    google.protobuf.Timestamp updated_at = 4;
-    google.protobuf.Timestamp deleted_at = 5;
+    status status = 3;
+    string filecontent = 4; // note: later make it bytes
+    string filetype = 5;
+    string hash = 6;
+    google.protobuf.Timestamp created_at = 7;
+    google.protobuf.Timestamp updated_at = 8;
+    google.protobuf.Timestamp deleted_at = 9;
 }

@@ -30,7 +30,16 @@ func (h *RequestHandler) SaveRequest(c context.Context, req *SaveRequestRequest)
 	var request *model.Request = &model.Request{}
 
 	if req.Request != nil {
-		request.Name = req.Request.Name
+		if req.Request.Name != "" {
+			request.Name = req.Request.Name
+		}
+		if req.Request.Filetype != "" {
+			request.Filetype = req.Request.Filetype
+		}
+		if req.Request.Filecontent != "" {
+			request.FileContent = []byte(req.Request.Filecontent)
+		}
+
 	}
 
 	err := h.RequestService.SaveRequest(request)
@@ -122,6 +131,13 @@ func (h *RequestHandler) UpdateRequest(c context.Context, req *UpdateRequestRequ
 		if req.Where.Name != "" {
 			where.Name = req.Where.Name
 		}
+		if req.Where.Status != 0 {
+			where.Status.FromInt(int32(req.Where.Status))
+		}
+		if req.Where.Filetype != "" {
+			where.Filetype = req.Where.Filetype
+		}
+
 		if req.Where.CreatedAt != nil {
 			where.CreatedAt = req.Where.CreatedAt.AsTime()
 		}
@@ -137,6 +153,12 @@ func (h *RequestHandler) UpdateRequest(c context.Context, req *UpdateRequestRequ
 		}
 		if req.Request.Name != "" {
 			update.Name = req.Request.Name
+		}
+		if req.Request.Status != 0 {
+			update.Status.FromInt(int32(req.Request.Status))
+		}
+		if req.Request.Filetype != "" {
+			update.Filetype = req.Request.Filetype
 		}
 		if req.Request.CreatedAt != nil {
 			update.CreatedAt = req.Request.CreatedAt.AsTime()

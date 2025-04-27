@@ -41,7 +41,7 @@ func (d *RequestDao) GetRequests(request *model.Request) (*[]model.Request, erro
 }
 
 func (d *RequestDao) UpdateRequest(where, update *model.Request) error {
-	err := d.Conn.DB.Model(&model.Request{}).Where(where).Updates(&update).Error
+	err := d.Conn.DB.Model(&model.Request{}).Where(where).Save(&update).Error
 	if err != nil {
 		return err
 	}

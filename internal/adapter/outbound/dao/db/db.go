@@ -18,7 +18,7 @@ func New() (*Conn, error) {
 		return nil, err
 	}
 
-	db.AutoMigrate(&model.Request{})
+	db.AutoMigrate(&model.Request{}, &model.Token{})
 
 	return &Conn{
 		db,

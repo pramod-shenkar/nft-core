@@ -7,6 +7,7 @@ import (
 	"nftledger/internal/adapter/inbound/rest"
 	"nftledger/internal/adapter/outbound/dao"
 	"nftledger/internal/adapter/outbound/dao/db"
+	"nftledger/internal/adapter/outbound/storage"
 	"nftledger/internal/core/api"
 
 	"github.com/gofiber/fiber/v2"
@@ -21,7 +22,9 @@ func main() {
 
 			db.New,
 			dao.NewRequestDao,
+			dao.NewTokenDao,
 			dao.NewDaos,
+			storage.NewClient,
 			api.NewRequestService,
 			api.NewServices,
 			rest.NewRequestHandler,

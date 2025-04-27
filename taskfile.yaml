@@ -1,8 +1,14 @@
 version: "3"
 tasks:
-  infra:
+  clean:
     cmds:
-      - cd ./deploy && docker compose up -d
+      - docker container rm -f $(docker container ls -aq)
+
+  infra:
+    cmds: 
+    - docker compose -f ./deploy/docker-compose.yaml down -v
+    - docker compose -f ./deploy/docker-compose.yaml up -d
+  
   protoc:
     cmds:    
       - protoc

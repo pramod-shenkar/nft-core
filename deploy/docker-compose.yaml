@@ -1,16 +1,4 @@
-version: '3.5'
-
-services:
-  mariadb:
-    image: mariadb
-    container_name: nftledger-db
-    hostname: nftledger-db
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
-      MYSQL_DATABASE: nftledger
-    ports:
-      - "3306:3306"
-    volumes:
-      - "./nftledger-db.sql:/docker-entrypoint-initdb.d/1.sql"
+version: '3.8'
+include:
+  - infra.yaml
+  - ipfs.yaml
