@@ -1,5 +1,0 @@
-__debug_bin*
-go.sum
-deploy/compose
-.devcontainer
-vendor
