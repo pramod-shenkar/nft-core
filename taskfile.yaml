@@ -1,14 +1,5 @@
 version: "3"
 tasks:
-  clean:
-    cmds:
-      - docker container rm -f $(docker container ls -aq)
-
-  infra:
-    cmds:
-      - docker compose -f ./deploy/docker-compose.yaml down -v
-      - docker compose -f ./deploy/docker-compose.yaml up -d
-
   protoc:
     cmds:
       - protoc
@@ -20,24 +11,10 @@ tasks:
         internal/adapter/inbound/grpc/protoc/**/*.proto
       - go mod tidy
 
-  grpccurl:
-    cmds:
-    # - grpcurl -plaintext localhost:9999 list
-    # - grpcurl -plaintext localhost:9999 list service.RequestService
-    # - grpcurl -plaintext localhost:9999 service.RequestService.GetRequests
-    # - grpcurl -plaintext -d '{"request":{"name":"alice"}}' localhost:9999 service.RequestService.SaveRequest
-    # - grpcurl -plaintext -d '{"where":{"name":"bob"}}' localhost:9999 service.RequestService.GetRequest
-    # - grpcurl -plaintext -d '{"where":{"name":"bob"},"request":{"name":"alice"}}' localhost:9999 service.RequestService.UpdateRequest
-    # - grpcurl -plaintext localhost:9999 service.RequestService.GetRequests
-    # - grpcurl -plaintext -d '{"where":{"name":"alice"}}' localhost:9999 service.RequestService.DeleteRequest
-    # - grpcurl -plaintext localhost:9999 service.RequestService.GetRequests
+  get-orgs:
+    - cp "./../nft-deploy/docker/orgs.json" "./deploy/orgs.json"
 
   dltclient:
-    # - |
-    #   solc
-    #   --combined-json abi,bin,bin-runtime,srcmap,srcmap-runtime,ast
-    #   --pretty-json
-    #    ./contracts/*.sol > "./build/json/combined.json"
     - curl -o "./internal/adapter/inbound/dlt/combined.json" https://raw.githubusercontent.com/pramod-shenkar/nft-chain/refs/heads/master/build/json/combined.json
     - abigen
       --combined-json "./internal/adapter/inbound/dlt/combined.json"
