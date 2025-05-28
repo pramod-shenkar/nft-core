@@ -1,7 +1,7 @@
 package bind
 
 import (
-	. "nftledger/internal/adapter/inbound/grpc/generated/model"
+	. "nft-protoc/generated/model"
 	"nftledger/internal/core/model"
 )
 

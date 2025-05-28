@@ -6,6 +6,7 @@ require (
 	github.com/caarlos0/env/v11 v11.3.1
 	github.com/ethereum/go-ethereum v1.15.11
 	github.com/gofiber/fiber/v2 v2.52.6
+	github.com/golang/protobuf v1.5.4
 	github.com/ipfs/boxo v0.10.0
 	github.com/ipfs/go-cid v0.4.1
 	github.com/ipfs/go-libipfs v0.7.0
@@ -102,7 +103,6 @@ require (
 	golang.org/x/sync v0.13.0 // indirect
 	golang.org/x/sys v0.32.0 // indirect
 	golang.org/x/text v0.24.0 // indirect
-	google.golang.org/genproto v0.0.0-20250512202823-5a2f75b736a9 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250505200425-f936aa4a68b2 // indirect
 	lukechampine.com/blake3 v1.2.1 // indirect
 	rsc.io/tmplfunc v0.0.3 // indirect

@@ -2,9 +2,12 @@ package grpc
 
 import (
 	"context"
-	. "nftledger/internal/adapter/inbound/grpc/generated/model"
-	. "nftledger/internal/adapter/inbound/grpc/generated/service"
+	"fmt"
+	. "nft-protoc/generated/model"
+	. "nft-protoc/generated/service"
+	"nftledger/internal/adapter/inbound/grpc/bind"
 
+	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
 	"nftledger/internal/core/api"
@@ -85,7 +88,7 @@ func (h *RequestHandler) GetRequest(c context.Context, req *GetRequestRequest) (
 	return response, nil
 }
 
-func (h *RequestHandler) GetRequests(c context.Context, req *GetRequestsRequest) (*GetRequestsResponse, error) {
+func (h *RequestHandler) GetRequests(req *GetRequestsRequest, stream grpc.ServerStreamingServer[GetRequestsResponse]) error {
 
 	var where *model.Request = &model.Request{}
 	if req.Where != nil {
@@ -105,20 +108,25 @@ func (h *RequestHandler) GetRequests(c context.Context, req *GetRequestsRequest)
 
 	requests, err := h.RequestService.GetRequests(where)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	var response []*Request
+	go func() error {
+		for {
+			select {
+			case <-stream.Context().Done():
+				return fmt.Errorf("client cancelled stream")
+			case request := <-model.RequestNotifier:
+				stream.Send(&GetRequestsResponse{Request: bind.ModelToGrpcRequest(request)})
+			}
+		}
+	}()
+
 	for _, request := range *requests {
-		response = append(response, &Request{
-			Id:        uint64(request.ID),
-			Name:      request.Name,
-			CreatedAt: timestamppb.New(request.CreatedAt),
-			UpdatedAt: timestamppb.New(request.UpdatedAt),
-		})
+		model.RequestNotifier <- &request
 	}
 
-	return &GetRequestsResponse{Request: response}, nil
+	return nil
 }
 
 func (h *RequestHandler) UpdateRequest(c context.Context, req *UpdateRequestRequest) (*UpdateRequestResponse, error) {

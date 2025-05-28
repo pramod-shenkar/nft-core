@@ -3,9 +3,11 @@ package server
 import (
 	"context"
 	"net"
+	"nftledger/common/config"
 	"nftledger/internal/adapter/inbound/grpc/interceptor"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/log"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"google.golang.org/grpc"
@@ -41,24 +43,26 @@ func Run(lc fx.Lifecycle, a *App) error {
 		fx.Hook{
 			OnStart: func(ctx context.Context) error {
 
-				listerner, err := net.Listen("tcp", ":9999")
+				listerner, err := net.Listen("tcp", ":"+config.App.Service.Port)
 				if err != nil {
 					return err
 				}
 
-				// rest listener
-				go func() {
-					// err = a.Listener(listerner)
-					// if err != nil {
-					// 	return
-					// }
-				}()
-
-				// grpc listener
-				err = a.Serve(listerner)
-				if err != nil {
-					return err
+				if config.App.Service.EndPointType == config.Rest {
+					go func() {
+						err = a.Listener(listerner)
+						if err != nil {
+							return
+						}
+					}()
+				} else {
+					err = a.Serve(listerner)
+					if err != nil {
+						return err
+					}
 				}
+
+				log.Info("nft-core service started at : ")
 
 				return nil
 			},

@@ -39,3 +39,10 @@ type Request struct {
 	Filetype    string
 	FileContent []byte
 }
+
+var RequestNotifier = make(chan *Request)
+
+func (u *Request) AfterCreate(tx *gorm.DB) (err error) {
+	RequestNotifier <- u
+	return nil
+}

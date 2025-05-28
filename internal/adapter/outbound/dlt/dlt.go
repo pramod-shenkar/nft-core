@@ -35,26 +35,26 @@ type Adapter struct {
 }
 
 // NewAdapter creates a new DLT adapter instance
-func NewAdapter(
-	client *ethclient.Client,
-	onBoardingAddress common.Address,
-	orgStoreAddress common.Address,
-	privateKey string,
-) (*Adapter, error) {
+func NewAdapter() (*Adapter, error) {
 	// Create authentication
 	auth, err := bind.NewKeyedTransactorWithChainID(config.App.Org.PrivateKey, config.App.Dlt.ChainId)
 	if err != nil {
 		return nil, err
 	}
 
+	client, err := ethclient.DialContext(context.Background(), config.App.Dlt.Url)
+	if err != nil {
+		return nil, err
+	}
+
 	// Initialize OnBoarding contract
-	onBoardingContract, err := NewOnBoardingContract(onBoardingAddress, client)
+	onBoardingContract, err := NewOnBoardingContract(config.App.Org.Address, client)
 	if err != nil {
 		return nil, err
 	}
 
 	// Initialize OrgStore contract
-	store, err := NewOrgStore(orgStoreAddress, client)
+	store, err := NewOrgStore(config.App.Org.Address, client)
 	if err != nil {
 		return nil, err
 	}
